@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# Java / Spring Boot
+target/
+*.class
+
+# Node / React
+frontend/node_modules/
+frontend/build/
+
+# Misc
+.idea/
+.vscode/
+.DS_Store
