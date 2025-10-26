@@ -1,0 +1,13 @@
+# Requirements for rag_pipeline (Python helpers)
+# Run: python -m pip install -r requirements.txt
+
+sentence-transformers>=2.2.2
+qdrant-client>=1.7.0
+requests>=2.28.0
+SQLAlchemy>=2.0.0
+psycopg2-binary>=2.9.6
+numpy>=1.24.0
+
+# Notes:
+# - These packages cover the scripts in `rag_pipeline/` (embedding, Qdrant client, HTTP calls, DB access).
+# - Ollama runs locally (not a PyPI dependency). Ensure `ollama` is installed and the daemon started: `ollama serve`.
