@@ -109,4 +109,7 @@ The architecture consists of the following major components:
 ---
 
 ## Repository Structure
+<img width="978" height="589" alt="image" src="https://github.com/user-attachments/assets/43448bdb-cc80-4f84-b4da-58a20222a593" />
+<img width="1001" height="591" alt="image" src="https://github.com/user-attachments/assets/37f37db5-1f25-405f-8e19-e501a90576ab" />
+
 
