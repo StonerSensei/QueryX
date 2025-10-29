@@ -1,43 +1,57 @@
-# retrieve_only.py
-from qdrant_client import QdrantClient
-from sentence_transformers import SentenceTransformer
+# retrieve_schema.py
+import logging
+from typing import List, Dict
+from config import QDRANT_COLLECTION, QDRANT_HOST, QDRANT_PORT, EMBED_MODEL
+from clients import get_qdrant_client, get_embedding_model
 
-# Configuration
-QDRANT_COLLECTION = "schema_descriptions"
-QDRANT_HOST = "localhost"
-QDRANT_PORT = 6333
-EMBED_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
-def main():
-   
-    model = SentenceTransformer(EMBED_MODEL_NAME)
 
-   
-    qdrant = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
-
-   
-    query = input("Enter English question: ").strip()
+def retrieve_schema(query: str, top_k: int = 3) -> List[Dict]:
+    """
+    Return top-k schema entries from Qdrant for the provided natural-language query.
+    Each returned dict contains: { "table": str, "description": str, "score": float }
+    """
     if not query:
-        print("No query provided.")
-        return
+        return []
 
-   
-    query_vector = model.encode([query])[0].tolist()
+    model = get_embedding_model()
+    qdrant = get_qdrant_client()
 
-   
-    results = qdrant.search(
-        collection_name=QDRANT_COLLECTION,
-        query_vector=query_vector,
-        limit=3  # Top 3 similar descriptions
-    )
+    try:
+        q_vec = model.encode([query], convert_to_numpy=True, normalize_embeddings=True)[0].tolist()
+    except Exception as e:
+        logging.error(f"Embedding generation failed: {e}")
+        raise
 
-    print("\n--- Retrieval Results ---")
-    for i, r in enumerate(results):
-        payload = r.payload
-        score = r.score
-        desc = payload.get("description", "(no description found)")
-        print(f"[{i+1}] Score: {score:.4f}")
-        print(f"Description: {desc}\n")
+    # Qdrant search API may vary by client version; use `search` with expected args.
+    try:
+        results = qdrant.search(
+            collection_name=QDRANT_COLLECTION,
+            query_vector=q_vec,
+            limit=top_k
+        )
+    except TypeError:
+        # Fallback if qdrant client uses different signature
+        results = qdrant.search(collection_name=QDRANT_COLLECTION, query_vector=q_vec, limit=top_k)
+
+    out = []
+    for r in results:
+        payload = getattr(r, "payload", None) or r.get("payload", {})
+        score = getattr(r, "score", None) or r.get("score", 0.0)
+        description = payload.get("description", "")
+        table = payload.get("table", None)
+        out.append({"table": table, "description": description, "score": float(score)})
+    return out
+
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    p = argparse.ArgumentParser()
+    p.add_argument("--top-k", type=int, default=3)
+    args = p.parse_args()
+    q = input("Enter English question: ").strip()
+    res = retrieve_schema(q, top_k=args.top_k)
+    print("\n--- Retrieval Results ---")
+    for i, r in enumerate(res, 1):
+        print(f"[{i}] score={r['score']:.4f} table={r['table']}\n{r['description']}\n")

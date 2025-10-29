@@ -1,61 +1,75 @@
-from sqlalchemy import create_engine, inspect
+# build_schema.py
+from sqlalchemy import inspect
+from qdrant_client.http.models import VectorParams, Distance, PointStruct
 from qdrant_client import QdrantClient
-from qdrant_client.http import models
 from sentence_transformers import SentenceTransformer
-from qdrant_client.http import models
-from qdrant_client.http.models import VectorParams, Distance
+from sqlalchemy import create_engine
+import numpy as np
+import logging
+import uuid
+from config import DB_URL, QDRANT_HOST, QDRANT_PORT, QDRANT_COLLECTION, EMBED_MODEL
+from clients import get_qdrant_client, get_embedding_model, get_db_engine
 
-engine = create_engine("postgresql://postgres:mypassword123@localhost:5432/ragDB")
+logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
-inspector = inspect(engine)
 
 def table_to_description(table_name, inspector):
     cols = inspector.get_columns(table_name)
     pks = inspector.get_pk_constraint(table_name).get("constrained_columns", [])
     fks = inspector.get_foreign_keys(table_name)
 
-    desc = f"Table {table_name}: stores information about {table_name}. "
-    col_descs = []
+    parts = [f"Table {table_name} contains columns:"]
     for col in cols:
         name, type_ = col["name"], str(col["type"])
-        role = []
+        tags = []
         if name in pks:
-            role.append("PK")
+            tags.append("Primary Key")
         for fk in fks:
             if name in fk["constrained_columns"]:
-                role.append(f"FK → {fk['referred_table']}.{fk['referred_columns'][0]}")
-        role_str = f" ({', '.join(role)})" if role else ""
-        col_descs.append(f"{name} {type_}{role_str}")
-    desc += "Columns are " + ", ".join(col_descs) + "."
-    return desc
-
-schema_texts = []
-for table in inspector.get_table_names():
-    schema_texts.append(table_to_description(table, inspector))
-
-print("\n".join(schema_texts))
-
-model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2") 
-embeddings = model.encode(schema_texts).tolist()
-
-qdrant = QdrantClient("localhost", port=6333)
-
-collection_name = "schema_descriptions"
-
-qdrant.recreate_collection(
-    collection_name=collection_name,
-    vectors_config=VectorParams(size=len(embeddings[0]), distance=Distance.COSINE),
-)
+                tags.append(f"Foreign Key to {fk['referred_table']}.{fk['referred_columns'][0]}")
+        tag_str = f" ({', '.join(tags)})" if tags else ""
+        parts.append(f"- {name}: {type_}{tag_str}")
+    return "\n".join(parts)
 
 
-qdrant.upload_points(
-    collection_name="schema_descriptions",
-    points=[
-        models.PointStruct(id=i, vector=embeddings[i], payload={"description": schema_texts[i]})
+def build_schema():
+    engine = get_db_engine()
+    inspector = inspect(engine)
+    qdrant = get_qdrant_client()
+    model = get_embedding_model()
+
+    table_names = inspector.get_table_names()
+    if not table_names:
+        logging.warning("No tables found in database.")
+        return
+
+    schema_texts, payloads = [], []
+    for table in table_names:
+        desc = table_to_description(table, inspector)
+        schema_texts.append(desc)
+        payloads.append({"table": table, "description": desc})
+
+    embeddings = model.encode(schema_texts, convert_to_numpy=True, normalize_embeddings=True)
+    dim = embeddings.shape[1]
+
+    if not qdrant.collection_exists(QDRANT_COLLECTION):
+        qdrant.create_collection(
+            collection_name=QDRANT_COLLECTION,
+            vectors_config=VectorParams(size=dim, distance=Distance.COSINE),
+        )
+
+    points = [
+        PointStruct(
+            id=str(uuid.uuid4()),
+            vector=embeddings[i].tolist(),
+            payload=payloads[i],
+        )
         for i in range(len(schema_texts))
-    ],
-)
+    ]
 
-print("\nSchema descriptions embedded and stored in Qdrant!")
+    qdrant.upsert(collection_name=QDRANT_COLLECTION, points=points)
+    logging.info(f"Uploaded {len(points)} schema entries to Qdrant collection '{QDRANT_COLLECTION}'.")
 
 
+if __name__ == "__main__":
+    build_schema()
