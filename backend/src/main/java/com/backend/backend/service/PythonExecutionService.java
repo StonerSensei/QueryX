@@ -36,12 +36,11 @@ public class PythonExecutionService {
 
         Process process = pb.start();
 
-        // Write question to stdin
+
         process.getOutputStream().write((question + "\n").getBytes());
         process.getOutputStream().flush();
         process.getOutputStream().close();
 
-        // Read output
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         StringBuilder output = new StringBuilder();
         String line;
