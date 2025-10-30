@@ -76,15 +76,12 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <h1 className="text-2xl font-semibold text-gray-800 mb-2">SQL Query Interface</h1>
           <p className="text-gray-600 text-sm">Natural language to SQL conversion</p>
         </div>
 
-        {/* Main Card */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          {/* Tabs */}
           <div className="flex gap-2 mb-6 border-b">
             <button
               onClick={() => setActiveTab('query')}
@@ -108,7 +105,6 @@ export default function App() {
             </button>
           </div>
 
-          {/* Query Tab */}
           {activeTab === 'query' && (
             <div className="space-y-4">
               <div>
@@ -168,7 +164,6 @@ export default function App() {
             </div>
           )}
 
-          {/* Schema Tab */}
           {activeTab === 'schema' && (
             <div className="space-y-4">
               <div>
@@ -232,14 +227,12 @@ export default function App() {
           )}
         </div>
 
-        {/* Error Display */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
             <p className="text-red-800 text-sm">{error}</p>
           </div>
         )}
 
-        {/* Response Display */}
         {response && (
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">Response</h2>
