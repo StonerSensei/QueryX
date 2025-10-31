@@ -23,7 +23,7 @@ from transformers import (
 # ---------------------------------------------------------------------
 logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
 
-MODEL_NAME = "google/flan-t5-base"  # base model; can use large for RTX 3090
+MODEL_NAME = "google/flan-t5-base"
 DATA_PATH = "data/fine_tune_dataset.jsonl"
 OUTPUT_DIR = "models/flan_t5_sql"
 BATCH_SIZE = 4
