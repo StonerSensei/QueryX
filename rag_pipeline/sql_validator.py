@@ -4,15 +4,44 @@ sql_validator.py
 Validates model-generated SQL queries before execution.
 Ensures:
  - Syntax correctness
- - Only SELECT statements are allowed
+ - Only SELECT/CTE (WITH) statements are allowed
  - No harmful or multi-statement queries
+ - Hard row LIMIT can be enforced via enforce_limit()
 ------------------------------------
 """
 
+import re
 import sqlparse
+from sqlparse.sql import Statement
+from sqlparse.tokens import Keyword, DML, DDL
 
+# Allowed top-level starting keywords
 ALLOWED_KEYWORDS = {"select", "with"}
-FORBIDDEN_KEYWORDS = {"drop", "delete", "update", "insert", "alter", "truncate"}
+
+# Unified forbidden keywords (matches generate_sql_from_query.FORBIDDEN_SQL)
+FORBIDDEN_KEYWORDS = {
+    "drop",
+    "delete",
+    "update",
+    "insert",
+    "alter",
+    "truncate",
+    "create",
+    "grant",
+    "revoke",
+}
+
+
+def _extract_keywords(stmt: Statement):
+    """
+    Yield lowercased SQL keywords from a parsed statement,
+    ignoring identifiers and literals. Uses sqlparse's token types
+    so we don't get false positives on column/table names.
+    """
+    for token in stmt.flatten():
+        if token.ttype in (Keyword, DML, DDL):
+            yield token.value.lower()
+
 
 def validate_sql(sql_query: str) -> bool:
     """
@@ -24,40 +53,94 @@ def validate_sql(sql_query: str) -> bool:
     Returns:
         bool: True if valid, False otherwise.
     """
-
     if not sql_query or not isinstance(sql_query, str):
         print("❌ Empty or invalid SQL input.")
         return False
 
-    # Normalize query
-    sql_lower = sql_query.strip().lower()
-
-    # 1. Check for forbidden keywords
-    if any(keyword in sql_lower for keyword in FORBIDDEN_KEYWORDS):
-        print("❌ Forbidden operation detected. Only SELECT queries are allowed.")
-        return False
-
-    # 2. Check for multiple statements
+    # 1. Check for multiple statements (e.g., 'SELECT ...; DROP TABLE ...;')
     statements = sqlparse.split(sql_query)
-    if len(statements) > 1:
-        print("❌ Multiple SQL statements detected — only single SELECT queries are allowed.")
+    if len(statements) != 1:
+        print("❌ Multiple SQL statements detected — only a single query is allowed.")
         return False
 
-    # 3. Parse and check first token
+    # 2. Parse and inspect the single statement
     parsed = sqlparse.parse(sql_query)
     if not parsed:
         print("❌ SQL parsing failed.")
         return False
 
     stmt = parsed[0]
-    first_token = stmt.token_first(skip_cm=True)
 
-    if not first_token or first_token.value.lower() not in ALLOWED_KEYWORDS:
-        print("❌ Query must start with SELECT or WITH.")
+    # 3. Forbidden keyword check using tokenized keywords only
+    keywords = set(_extract_keywords(stmt))
+    forbidden_hits = keywords.intersection(FORBIDDEN_KEYWORDS)
+    if forbidden_hits:
+        print(
+            f"❌ Forbidden operation detected ({', '.join(sorted(forbidden_hits))}). "
+            "Only read-only SELECT/CTE queries are allowed."
+        )
+        return False
+
+    # 4. Ensure the query starts with SELECT or WITH
+    first_token = stmt.token_first(skip_cm=True)
+    if not first_token:
+        print("❌ Could not find the first token in the SQL statement.")
+        return False
+
+    first_val = first_token.value.lower()
+    if first_val not in ALLOWED_KEYWORDS:
+        print("❌ Query must start with SELECT or WITH (CTE).")
         return False
 
     # Passed all checks
     return True
+
+
+# -----------------------------------------------------------
+# Hard LIMIT enforcement helper
+# -----------------------------------------------------------
+
+_LIMIT_REGEX = re.compile(r"\blimit\s+(\d+)\b", flags=re.IGNORECASE)
+
+
+def enforce_limit(sql_query: str, max_rows: int) -> str:
+    """
+    Ensure the SQL query has a LIMIT clause, and clamp any existing LIMIT
+    to 'max_rows'.
+
+    Args:
+        sql_query: original SQL (may or may not contain a LIMIT)
+        max_rows: maximum number of rows allowed
+
+    Returns:
+        str: SQL with a single LIMIT <= max_rows and a trailing semicolon.
+    """
+    if not isinstance(sql_query, str) or not sql_query.strip():
+        return sql_query
+
+    # Work on a cleaned version of the first statement
+    statements = sqlparse.split(sql_query)
+    if not statements:
+        return sql_query
+
+    text = statements[0].strip().rstrip(";")
+
+    m = _LIMIT_REGEX.search(text)
+    if m:
+        # Existing LIMIT -> clamp it
+        try:
+            current_limit = int(m.group(1))
+        except ValueError:
+            # If something weird like LIMIT 'foo', just replace with safe max_rows
+            current_limit = max_rows
+
+        new_limit = min(current_limit, max_rows)
+        text = _LIMIT_REGEX.sub(f"LIMIT {new_limit}", text)
+    else:
+        # No LIMIT present -> append one
+        text = f"{text} LIMIT {max_rows}"
+
+    return text + ";"
 
 
 if __name__ == "__main__":
@@ -66,8 +149,12 @@ if __name__ == "__main__":
         "SELECT * FROM users;",
         "DROP TABLE users;",
         "UPDATE employees SET name='John';",
-        "SELECT name FROM customers WHERE id = 1; SELECT * FROM orders;"
+        "SELECT name FROM customers WHERE id = 1; SELECT * FROM orders;",
+        "SELECT * FROM events LIMIT 1000;",
+        "SELECT * FROM logs",
     ]
     for q in queries:
         print(f"\nQuery: {q}")
         print("Valid ✅" if validate_sql(q) else "Invalid ❌")
+        if validate_sql(q):
+            print("Clamped:", enforce_limit(q, max_rows=100))
