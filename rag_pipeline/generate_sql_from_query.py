@@ -26,7 +26,7 @@ from config import (
 )
 from clients import get_db_engine, get_embedding_model
 from retrieve_schema import retrieve_schema
-from sql_validator import validate_sql  # ✅ import validator
+from sql_validator import validate_sql, enforce_limit  # ✅ import validator + enforce_limit
 
 # Logging setup
 logging.basicConfig(
@@ -51,18 +51,6 @@ def is_sql_safe(sql: str) -> bool:
     if not sql:
         return False
     return not FORBIDDEN_SQL.search(sql)
-
-
-def ensure_limit(sql: str, max_rows: int) -> str:
-    """Guarantee that a LIMIT clause is present."""
-    parsed = sqlparse.parse(sql)
-    if not parsed:
-        return sql
-    statement = parsed[0]
-    sql_text = str(statement).strip().rstrip(";")
-    if re.search(r"\blimit\b", sql_text, re.IGNORECASE):
-        return sql_text + ";"
-    return sql_text + f" LIMIT {max_rows};"
 
 
 def clean_model_output(raw: str) -> str:
@@ -171,7 +159,8 @@ def generate_and_optionally_execute(question: str, execute: bool = False, top_k:
         logging.error("Generated SQL contains forbidden statements. Aborting execution.")
         return {"sql": sql, "safe": False, "executed": False}
 
-    sql_with_limit = ensure_limit(sql, EXECUTE_MAX_ROWS)
+    # Use enforce_limit to guarantee hard cap
+    sql_with_limit = enforce_limit(sql, EXECUTE_MAX_ROWS)
     result = {"sql": sql_with_limit, "safe": True, "executed": False, "result": None}
 
     if execute:
