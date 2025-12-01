@@ -1,0 +1,103 @@
+2025-12-01 16:27:34,534 - INFO - Start inference for question: give me a random name of an employee
+2025-12-01 16:27:34,534 - INFO - Retrieving schema context for query: give me a random name of an employee
+2025-12-01 16:27:34,537 - INFO - Use pytorch device_name: cpu
+2025-12-01 16:27:34,537 - INFO - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-01 16:27:38,150 - INFO - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-01 16:27:38,479 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-01 16:27:38,489 - INFO - Qdrant client initialized.
+2025-12-01 16:27:41,095 - ERROR - Qdrant search failed: 'QdrantClient' object has no attribute 'search'
+2025-12-01 16:27:41,095 - WARNING - No schema context returned.
+2025-12-01 16:32:10,005 - INFO - Start inference for question: how many genders are there in database.
+2025-12-01 16:32:10,005 - INFO - Retrieving schema context for query: how many genders are there in database.
+2025-12-01 16:32:10,010 - INFO - Use pytorch device_name: cpu
+2025-12-01 16:32:10,010 - INFO - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-01 16:32:13,393 - INFO - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-01 16:32:13,562 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-01 16:32:13,573 - INFO - Qdrant client initialized.
+2025-12-01 16:32:16,197 - ERROR - Qdrant search failed: 'QdrantClient' object has no attribute 'search'
+2025-12-01 16:32:16,197 - WARNING - No schema context returned.
+2025-12-01 16:38:02,899 - INFO - Retrieving schema context for query: gender
+2025-12-01 16:38:02,904 - INFO - Use pytorch device_name: cpu
+2025-12-01 16:38:02,904 - INFO - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-01 16:38:06,926 - INFO - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-01 16:38:07,087 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-01 16:38:07,091 - INFO - Qdrant client initialized.
+2025-12-01 16:38:09,628 - ERROR - Qdrant search failed: 'QdrantClient' object has no attribute 'search'
+2025-12-01 16:39:03,009 - INFO - Retrieving schema context for query: gender
+2025-12-01 16:39:03,009 - INFO - Use pytorch device_name: cpu
+2025-12-01 16:39:03,009 - INFO - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-01 16:39:06,905 - INFO - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-01 16:39:07,080 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-01 16:39:07,091 - INFO - Qdrant client initialized.
+2025-12-01 16:39:09,495 - ERROR - Qdrant search failed: 'QdrantClient' object has no attribute 'search'
+2025-12-01 17:05:48,128 - INFO - QueryX-RAG - Retrieving schema context for query: gender
+2025-12-01 17:05:48,137 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cpu
+2025-12-01 17:05:48,137 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-01 17:05:51,567 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-01 17:05:53,973 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-01 17:05:54,141 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-01 17:05:54,154 - INFO - root - Qdrant client initialized.
+2025-12-01 17:05:54,154 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=3).
+2025-12-01 17:05:54,189 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-01 17:05:54,193 - INFO - QueryX-RAG - Retrieved 2 schema entries. Top table: mytable (score=0.0465)
+2025-12-01 17:10:47,658 - INFO - QueryX-RAG - Start inference for question: how many employee with gender Female have EducationField in Life Sciences
+2025-12-01 17:10:47,658 - INFO - QueryX-RAG - Retrieving schema context for query: how many employee with gender Female have EducationField in Life Sciences
+2025-12-01 17:10:47,667 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cpu
+2025-12-01 17:10:47,668 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-01 17:10:51,489 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-01 17:10:54,174 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-01 17:10:54,352 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-01 17:10:54,366 - INFO - root - Qdrant client initialized.
+2025-12-01 17:10:54,366 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-01 17:10:54,389 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-01 17:10:54,390 - INFO - QueryX-RAG - Retrieved 2 schema entries. Top table: mytable (score=0.1730)
+2025-12-01 17:10:54,390 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention-based re-ranking.
+2025-12-01 17:10:54,391 - INFO - QueryX-RAG - Loading T5 model from models/flan_t5_sql (device=cpu)
+2025-12-01 17:10:57,206 - INFO - QueryX-RAG - Generated SQL (T5): JobInvolvement: BIGINT - WorkLife Balance: TEXT - MonthlyIncome: ZEXT
+2025-12-01 17:10:57,212 - ERROR - QueryX-RAG - SQL validation failed for: JobInvolvement: BIGINT - WorkLife Balance: TEXT - MonthlyIncome: ZEXT
+2025-12-01 17:22:22,989 - INFO - QueryX-RAG - Start inference for question: how many employee with gender Female have EducationField in Life Sciences
+2025-12-01 17:22:22,989 - INFO - QueryX-RAG - Retrieving schema context for query: how many employee with gender Female have EducationField in Life Sciences
+2025-12-01 17:22:22,998 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cpu
+2025-12-01 17:22:22,998 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-01 17:22:26,594 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-01 17:22:29,210 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-01 17:22:29,396 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-01 17:22:29,406 - INFO - root - Qdrant client initialized.
+2025-12-01 17:22:29,406 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-01 17:22:29,428 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-01 17:22:29,430 - INFO - QueryX-RAG - Retrieved 2 schema entries. Top table: mytable (score=0.1730)
+2025-12-01 17:22:29,430 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention-based re-ranking.
+2025-12-01 17:22:29,431 - INFO - QueryX-RAG - Loading T5 model from models/flan_t5_sql (device=cpu)
+2025-12-01 17:22:31,494 - INFO - QueryX-RAG - Generated SQL (T5): NumCompaniesWorked: BIGINT
+2025-12-01 17:22:31,497 - ERROR - QueryX-RAG - SQL validation failed for: NumCompaniesWorked: BIGINT
+2025-12-01 17:28:17,483 - INFO - QueryX-RAG - Start inference for question: List all mytable where RelationshipSatisfaction is greater than 100.
+2025-12-01 17:28:17,483 - INFO - QueryX-RAG - Retrieving schema context for query: List all mytable where RelationshipSatisfaction is greater than 100.
+2025-12-01 17:28:17,493 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cpu
+2025-12-01 17:28:17,494 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-01 17:28:21,352 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-01 17:28:23,997 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-01 17:28:24,196 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-01 17:28:24,206 - INFO - root - Qdrant client initialized.
+2025-12-01 17:28:24,206 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-01 17:28:24,224 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-01 17:28:24,225 - INFO - QueryX-RAG - Retrieved 2 schema entries. Top table: mytable (score=0.4739)
+2025-12-01 17:28:24,226 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention-based re-ranking.
+2025-12-01 17:28:24,226 - INFO - QueryX-RAG - Loading T5 model from models/flan_t5_sql (device=cpu)
+2025-12-01 17:28:26,207 - INFO - QueryX-RAG - Generated SQL (T5): NumCompaniesWorked: BIGINT
+2025-12-01 17:28:26,214 - ERROR - QueryX-RAG - SQL validation failed for: NumCompaniesWorked: BIGINT
+2025-12-01 17:42:30,120 - INFO - QueryX-RAG - Start inference for question: List all mytable where RelationshipSatisfaction is greater than 100.
+2025-12-01 17:42:30,121 - INFO - QueryX-RAG - Retrieving schema context for query: List all mytable where RelationshipSatisfaction is greater than 100.
+2025-12-01 17:42:30,128 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cpu
+2025-12-01 17:42:30,129 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-01 17:42:34,448 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-01 17:42:38,158 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-01 17:42:38,442 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-01 17:42:38,454 - INFO - root - Qdrant client initialized.
+2025-12-01 17:42:38,454 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-01 17:42:38,479 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-01 17:42:38,486 - INFO - QueryX-RAG - Retrieved 2 schema entries. Top table: mytable (score=0.4739)
+2025-12-01 17:42:38,486 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention-based re-ranking.
+2025-12-01 17:42:38,487 - INFO - QueryX-RAG - Loading T5 model from models/flan_t5_sql (device=cpu)
+2025-12-01 17:42:38,982 - INFO - root - Database engine initialized.
+2025-12-01 17:42:39,378 - INFO - QueryX-RAG - Generated SQL (T5): WorkLife Balance
+2025-12-01 17:42:39,386 - ERROR - QueryX-RAG - SQL validation failed for: WorkLife Balance

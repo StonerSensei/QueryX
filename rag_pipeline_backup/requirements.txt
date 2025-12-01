@@ -1,0 +1,34 @@
+# ============================================
+# QueryX RAG Pipeline - Requirements
+# ============================================
+
+# ---- Core Python Libraries ----
+numpy>=1.26.0
+pandas>=2.2.0
+tqdm>=4.66.4
+
+# ---- Database and ORM ----
+SQLAlchemy>=2.0.25
+psycopg2-binary>=2.9.9
+
+# ---- Vector Database (Qdrant) ----
+qdrant-client>=1.9.0
+
+# ---- Embedding and Model Libraries ----
+sentence-transformers>=2.6.1
+torch>=2.3.0
+transformers>=4.40.0
+accelerate>=0.29.3      # speeds up model training/inference
+datasets>=2.20.0        # for dataset handling (used in train_sql_model.py)
+
+# ---- API Requests and Environment Management ----
+requests>=2.32.0
+python-dotenv>=1.0.1
+
+# ---- SQL Parsing and Validation ----
+sqlparse>=0.5.1
+
+# ---- Logging, Debugging and Pretty Output ----
+rich>=13.7.0
+loguru>=0.7.2           # cleaner logging for utils/logger.py
+
