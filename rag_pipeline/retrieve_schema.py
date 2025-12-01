@@ -51,7 +51,6 @@ def _search_qdrant(
         # resp is a QueryResponse; actual hits are in resp.points
         return list(resp.points or [])
 
-    # 2) Legacy API: client.search(...)
     if hasattr(qdrant, "search"):
         logger.info(
             "Using Qdrant.search for schema retrieval (top_k=%d).",
@@ -65,7 +64,6 @@ def _search_qdrant(
         )
         return list(hits or [])
 
-    # 3) If neither exists, we can't search
     logger.error(
         "Qdrant client has neither 'query_points' nor 'search' methods."
     )
@@ -89,7 +87,6 @@ def retrieve_schema(
     """
     logger.info("Retrieving schema context for query: %s", question)
 
-    # 1) Get embedding model (singleton) and embed the question
     model = get_embedding_model()
     query_vec = model.encode(
         [question],
@@ -98,7 +95,6 @@ def retrieve_schema(
     )[0]
     logger.info("Query embedding generated (dim=%d).", query_vec.shape[0])
 
-    # 2) Call Qdrant
     try:
         hits = _search_qdrant(query_vec, top_k)
     except Exception as e:
@@ -109,7 +105,6 @@ def retrieve_schema(
         logger.warning("No hits returned from Qdrant for query: %s", question)
         return []
 
-    # 3) Normalize results into a simple list of dicts
     schema_contexts: List[Dict[str, Any]] = []
     for h in hits:
         payload = getattr(h, "payload", {}) or {}
@@ -125,7 +120,6 @@ def retrieve_schema(
             }
         )
 
-    # 4) Sort by score descending just in case
     schema_contexts.sort(key=lambda x: x["score"], reverse=True)
 
     logger.info(
