@@ -101,3 +101,133 @@
 2025-12-01 17:42:38,982 - INFO - root - Database engine initialized.
 2025-12-01 17:42:39,378 - INFO - QueryX-RAG - Generated SQL (T5): WorkLife Balance
 2025-12-01 17:42:39,386 - ERROR - QueryX-RAG - SQL validation failed for: WorkLife Balance
+2025-12-04 19:49:51,020 - INFO - QueryX-RAG - Start inference for question: List all mytable where RelationshipSatisfaction is greater than 100.
+2025-12-04 19:49:51,022 - INFO - QueryX-RAG - Retrieving schema context for query: List all mytable where RelationshipSatisfaction is greater than 100.
+2025-12-04 19:49:51,029 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cpu
+2025-12-04 19:49:51,029 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-04 19:49:54,943 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-04 19:49:57,466 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-04 19:49:57,653 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-04 19:49:57,660 - INFO - root - Qdrant client initialized.
+2025-12-04 19:49:57,660 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-04 19:49:57,679 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-04 19:49:57,683 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.4739)
+2025-12-04 19:49:57,684 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention-based re-ranking.
+2025-12-04 19:49:57,684 - INFO - QueryX-RAG - Loading T5 model from models/flan_t5_sql (device=cpu)
+2025-12-04 19:49:58,063 - INFO - root - Database engine initialized.
+2025-12-04 19:49:58,378 - INFO - QueryX-RAG - Generated SQL (T5): Employee Number
+2025-12-04 19:49:58,385 - ERROR - QueryX-RAG - SQL validation failed for: Employee Number
+2025-12-05 16:08:39,253 - INFO - QueryX-RAG - Retrieving schema context for query: gender
+2025-12-05 16:08:39,261 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cpu
+2025-12-05 16:08:39,262 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 16:08:42,951 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 16:08:45,269 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 16:08:45,451 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 16:08:45,461 - INFO - root - Qdrant client initialized.
+2025-12-05 16:08:45,461 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=3).
+2025-12-05 16:08:45,476 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 16:08:45,477 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.0465)
+2025-12-05 16:10:54,197 - INFO - QueryX-RAG - Start inference for question: name all genders
+2025-12-05 16:10:54,197 - INFO - QueryX-RAG - Retrieving schema context for query: name all genders
+2025-12-05 16:10:54,203 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cpu
+2025-12-05 16:10:54,203 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 16:10:58,182 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 16:11:00,858 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 16:11:01,033 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 16:11:01,050 - INFO - root - Qdrant client initialized.
+2025-12-05 16:11:01,050 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-05 16:11:01,058 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 16:11:01,061 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.1262)
+2025-12-05 16:11:01,061 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention-based re-ranking.
+2025-12-05 16:11:01,062 - INFO - QueryX-RAG - Loading T5 model from models/flan_t5_sql (device=cpu)
+2025-12-05 16:11:01,487 - INFO - root - Database engine initialized.
+2025-12-05 16:11:02,005 - INFO - QueryX-RAG - Generated SQL (T5): females
+2025-12-05 16:11:02,015 - ERROR - QueryX-RAG - SQL validation failed for: females
+2025-12-05 20:31:11,591 - INFO - QueryX-RAG - Start inference for question: how many employee with gender 'Female'
+2025-12-05 20:31:11,592 - INFO - QueryX-RAG - Retrieving schema context for query: how many employee with gender 'Female'
+2025-12-05 20:31:11,599 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cpu
+2025-12-05 20:31:11,599 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 20:31:15,254 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 20:31:19,267 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 20:31:19,641 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 20:31:19,652 - INFO - root - Qdrant client initialized.
+2025-12-05 20:31:19,652 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-05 20:31:19,676 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 20:31:19,678 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.2182)
+2025-12-05 20:31:19,678 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention-based re-ranking.
+2025-12-05 20:31:19,678 - INFO - QueryX-RAG - Loading T5 model from models/flan_t5_sql (device=cpu)
+2025-12-05 20:31:20,223 - INFO - root - Database engine initialized.
+2025-12-05 20:31:20,839 - INFO - QueryX-RAG - Generated SQL (T5): 8
+2025-12-05 20:31:20,848 - ERROR - QueryX-RAG - SQL validation failed for: 8
+2025-12-05 20:48:06,554 - INFO - QueryX-RAG - Start inference for question: name all genders
+2025-12-05 20:48:06,555 - INFO - QueryX-RAG - Retrieving schema context for query: name all genders
+2025-12-05 20:48:06,562 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cpu
+2025-12-05 20:48:06,562 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 20:48:09,705 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 20:48:12,207 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 20:48:12,373 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 20:48:12,391 - INFO - root - Qdrant client initialized.
+2025-12-05 20:48:12,391 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-05 20:48:12,410 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 20:48:12,413 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.1262)
+2025-12-05 20:48:12,413 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention-based re-ranking.
+2025-12-05 20:48:12,414 - INFO - QueryX-RAG - Loading T5 model from models/flan_t5_sql (device=cpu)
+2025-12-05 20:48:12,771 - INFO - root - Database engine initialized.
+2025-12-05 20:48:13,057 - INFO - QueryX-RAG - Generated SQL (T5): females
+2025-12-05 20:48:13,064 - ERROR - QueryX-RAG - SQL validation failed for: females
+2025-12-05 21:16:04,578 - INFO - QueryX-RAG - Start inference for question: give total number of females
+2025-12-05 21:16:04,579 - INFO - QueryX-RAG - Retrieving schema context for query: give total number of females
+2025-12-05 21:16:04,581 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cuda:0
+2025-12-05 21:16:04,581 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 21:16:08,144 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 21:16:08,784 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 21:16:08,963 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 21:16:08,973 - INFO - root - Qdrant client initialized.
+2025-12-05 21:16:08,973 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-05 21:16:09,011 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 21:16:09,016 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.1852)
+2025-12-05 21:16:09,016 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention-based re-ranking.
+2025-12-05 21:16:09,016 - INFO - QueryX-RAG - Loading T5 model from models/flan_t5_sql (device=cuda)
+2025-12-05 21:16:09,620 - INFO - root - Database engine initialized.
+2025-12-05 21:16:10,702 - INFO - QueryX-RAG - Generated SQL (T5): TotalWorking Years, Training Times Last Year, WorkLife Balance, Years At Company, Years In Current Role, Years Since Last Promotion, Years With CurrManager
+2025-12-05 21:16:10,702 - ERROR - QueryX-RAG - SQL validation failed for: TotalWorking Years, Training Times Last Year, WorkLife Balance, Years At Company, Years In Current Role, Years Since Last Promotion, Years With CurrManager
+2025-12-05 21:55:53,630 - INFO - QueryX-RAG - Start inference for question: give total number of females
+2025-12-05 21:55:53,631 - INFO - QueryX-RAG - Retrieving schema context for query: give total number of females
+2025-12-05 21:55:53,635 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cuda:0
+2025-12-05 21:55:53,635 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 21:55:57,854 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 21:55:58,467 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 21:55:58,643 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 21:55:58,654 - INFO - root - Qdrant client initialized.
+2025-12-05 21:55:58,654 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-05 21:55:58,685 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 21:55:58,689 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.1852)
+2025-12-05 21:55:58,690 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention re-ranking.
+2025-12-05 21:55:58,690 - INFO - QueryX-RAG - Loading T5 model from models/flan_t5_sql (device=cuda)
+2025-12-05 21:55:59,316 - INFO - root - Database engine initialized.
+2025-12-05 21:56:00,415 - WARNING - QueryX-RAG - Model output didn't start with SELECT/WITH. Trying forced-prefix decoding...
+2025-12-05 21:56:00,755 - ERROR - QueryX-RAG - Execution error: (psycopg2.errors.SyntaxError) syntax error at or near "NOW"
+LINE 1: SELECT AN APPOINTMENT NOW! LIMIT 100;
+                              ^
+
+[SQL: SELECT AN APPOINTMENT NOW! LIMIT 100;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-12-05 21:56:00,755 - ERROR - QueryX-RAG - Execution failed (attempt 1 / 1): (psycopg2.errors.SyntaxError) syntax error at or near "NOW"
+LINE 1: SELECT AN APPOINTMENT NOW! LIMIT 100;
+                              ^
+
+[SQL: SELECT AN APPOINTMENT NOW! LIMIT 100;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-12-05 21:56:01,244 - INFO - QueryX-RAG - Self-correction attempt produced SQL: SELECT a APPOINTMENT NOW! LIMIT 100;
+2025-12-05 21:56:01,246 - ERROR - QueryX-RAG - Execution error: (psycopg2.errors.SyntaxError) syntax error at or near "NOW"
+LINE 1: SELECT a APPOINTMENT NOW! LIMIT 100;
+                             ^
+
+[SQL: SELECT a APPOINTMENT NOW! LIMIT 100;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-12-05 21:56:01,246 - ERROR - QueryX-RAG - Execution failed (attempt 2 / 1): (psycopg2.errors.SyntaxError) syntax error at or near "NOW"
+LINE 1: SELECT a APPOINTMENT NOW! LIMIT 100;
+                             ^
+
+[SQL: SELECT a APPOINTMENT NOW! LIMIT 100;]
+(Background on this error at: https://sqlalche.me/e/20/f405)

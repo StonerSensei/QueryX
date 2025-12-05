@@ -1,0 +1,8 @@
+{
+  "exact_match": 0.0,
+  "valid_sql": 1.0,
+  "exec_success": 0.0,
+  "exec_match": 0.0,
+  "avg_latency_ms": 256.11339744768645,
+  "avg_jaccard_id": 0.1954045223782066
+}

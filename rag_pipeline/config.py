@@ -32,3 +32,15 @@ DEFAULT_TOP_K = 3
 
 # Logging level
 LOG_LEVEL = "INFO"
+
+# --- Generation / safety defaults ---
+INSTRUCTION_PREFIX = "Return only a single valid PostgreSQL query starting with SELECT or WITH.\n"
+EXECUTE_MAX_ROWS = 100          # keep if not already present
+DEFAULT_TOP_K = 3               # keep if not already present
+
+# (Optional) path to your fine-tuned model
+MODEL_PATH = "models/flan_t5_sql"  # keep if not already present
+
+# (Optional) embedding model used throughout
+EMBED_MODEL = "sentence-transformers/all-MiniLM-L6-v2"  # if not already present
+
