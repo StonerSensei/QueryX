@@ -1,0 +1,180 @@
+2025-12-05 22:58:23,468 - INFO - QueryX-RAG - Start inference for question: Give the starting 5 rows
+2025-12-05 22:58:23,468 - INFO - QueryX-RAG - Retrieving schema context for query: Give the starting 5 rows
+2025-12-05 22:58:23,472 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cuda:0
+2025-12-05 22:58:23,472 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 22:58:27,762 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 22:58:28,344 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 22:58:28,532 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 22:58:28,542 - INFO - root - Qdrant client initialized.
+2025-12-05 22:58:28,542 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-05 22:58:28,561 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 22:58:28,562 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.2145)
+2025-12-05 22:58:28,563 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention re-ranking.
+2025-12-05 22:58:28,563 - INFO - QueryX-RAG - Using Ollama sqlcoder as primary SQL generator.
+2025-12-05 22:58:28,624 - INFO - root - Database engine initialized.
+2025-12-05 22:58:30,796 - ERROR - QueryX-RAG - Ollama returned 404: {"error":"model 'sqlcoder:latest ' not found"}
+2025-12-05 22:58:30,797 - WARNING - QueryX-RAG - Ollama primary did not return valid SQL. Falling back to local T5.
+2025-12-05 22:58:30,798 - INFO - QueryX-RAG - Loading T5 model from models/flan_t5_sql (device=cuda)
+2025-12-05 22:58:31,064 - ERROR - QueryX-RAG - T5 generation failed: models/flan_t5_sql is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`
+2025-12-05 22:58:31,064 - WARNING - QueryX-RAG - Model output not SQL; trying instruction-hardened prompt.
+2025-12-05 22:58:31,064 - INFO - QueryX-RAG - Loading T5 model from models/flan_t5_sql (device=cuda)
+2025-12-05 23:02:04,923 - INFO - QueryX-RAG - Start inference for question: give me top 5 rows.
+2025-12-05 23:02:04,924 - INFO - QueryX-RAG - Retrieving schema context for query: give me top 5 rows.
+2025-12-05 23:02:04,929 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cuda:0
+2025-12-05 23:02:04,930 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 23:02:09,248 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 23:02:09,852 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 23:02:10,017 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 23:02:10,025 - INFO - root - Qdrant client initialized.
+2025-12-05 23:02:10,025 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-05 23:02:10,038 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 23:02:10,040 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.2753)
+2025-12-05 23:02:10,040 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention re-ranking.
+2025-12-05 23:02:10,040 - INFO - QueryX-RAG - Using Ollama sqlcoder as primary SQL generator.
+2025-12-05 23:02:10,098 - INFO - root - Database engine initialized.
+2025-12-05 23:02:19,138 - WARNING - QueryX-RAG - Ollama primary did not return valid SQL. Falling back to local T5.
+2025-12-05 23:02:19,138 - INFO - QueryX-RAG - Loading T5 model from models/flan_t5_sql (device=cuda)
+2025-12-05 23:02:19,400 - ERROR - QueryX-RAG - T5 generation failed: models/flan_t5_sql is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`
+2025-12-05 23:02:19,400 - WARNING - QueryX-RAG - Model output not SQL; trying instruction-hardened prompt.
+2025-12-05 23:02:19,401 - INFO - QueryX-RAG - Loading T5 model from models/flan_t5_sql (device=cuda)
+2025-12-05 23:04:15,393 - INFO - QueryX-RAG - Start inference for question: 
+2025-12-05 23:04:15,394 - INFO - QueryX-RAG - Retrieving schema context for query: 
+2025-12-05 23:04:15,400 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cuda:0
+2025-12-05 23:04:15,400 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 23:04:19,185 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 23:04:19,837 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 23:04:20,015 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 23:04:20,025 - INFO - root - Qdrant client initialized.
+2025-12-05 23:04:20,025 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-05 23:04:20,039 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 23:04:20,040 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=-0.0061)
+2025-12-05 23:04:20,041 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention re-ranking.
+2025-12-05 23:04:20,041 - INFO - QueryX-RAG - Using Ollama sqlcoder as primary SQL generator.
+2025-12-05 23:04:20,115 - INFO - root - Database engine initialized.
+2025-12-05 23:04:26,382 - WARNING - QueryX-RAG - Ollama failed. Using rule-based fallback.
+2025-12-05 23:04:52,721 - INFO - QueryX-RAG - Start inference for question: give me top 5 rows
+2025-12-05 23:04:52,722 - INFO - QueryX-RAG - Retrieving schema context for query: give me top 5 rows
+2025-12-05 23:04:52,729 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cuda:0
+2025-12-05 23:04:52,729 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 23:04:56,680 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 23:04:57,254 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 23:04:57,419 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 23:04:57,420 - INFO - root - Qdrant client initialized.
+2025-12-05 23:04:57,420 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-05 23:04:57,459 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 23:04:57,461 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.2788)
+2025-12-05 23:04:57,461 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention re-ranking.
+2025-12-05 23:04:57,461 - INFO - QueryX-RAG - Using Ollama sqlcoder as primary SQL generator.
+2025-12-05 23:04:57,522 - INFO - root - Database engine initialized.
+2025-12-05 23:05:06,614 - WARNING - QueryX-RAG - Ollama failed. Using rule-based fallback.
+2025-12-05 23:07:11,977 - INFO - QueryX-RAG - Start inference for question: give me the top 5 rows.
+2025-12-05 23:07:11,977 - INFO - QueryX-RAG - Retrieving schema context for query: give me the top 5 rows.
+2025-12-05 23:07:11,980 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cuda:0
+2025-12-05 23:07:11,980 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 23:07:15,889 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 23:07:16,481 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 23:07:16,651 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 23:07:16,661 - INFO - root - Qdrant client initialized.
+2025-12-05 23:07:16,661 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-05 23:07:16,676 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 23:07:16,678 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.2862)
+2025-12-05 23:07:16,678 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention re-ranking.
+2025-12-05 23:07:16,678 - INFO - QueryX-RAG - Using Ollama sqlcoder as primary SQL generator.
+2025-12-05 23:07:16,739 - INFO - root - Database engine initialized.
+2025-12-05 23:07:23,604 - WARNING - QueryX-RAG - Ollama failed. Using rule-based fallback.
+2025-12-05 23:09:30,377 - INFO - QueryX-RAG - Start inference for question: give me the top 5 rows
+2025-12-05 23:09:30,378 - INFO - QueryX-RAG - Retrieving schema context for query: give me the top 5 rows
+2025-12-05 23:09:30,385 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cuda:0
+2025-12-05 23:09:30,385 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 23:09:34,324 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 23:09:34,922 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 23:09:35,073 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 23:09:35,087 - INFO - root - Qdrant client initialized.
+2025-12-05 23:09:35,087 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-05 23:09:35,106 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 23:09:35,112 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.2898)
+2025-12-05 23:09:35,112 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention re-ranking.
+2025-12-05 23:09:35,112 - INFO - QueryX-RAG - Using Ollama sqlcoder as primary SQL generator.
+2025-12-05 23:09:35,170 - INFO - root - Database engine initialized.
+2025-12-05 23:09:41,270 - ERROR - QueryX-RAG - SQL validation failed: <s> SELECT * FROM mytable LIMIT 5;
+2025-12-05 23:10:59,264 - INFO - QueryX-RAG - Start inference for question: give me top 5 rows.
+2025-12-05 23:10:59,265 - INFO - QueryX-RAG - Retrieving schema context for query: give me top 5 rows.
+2025-12-05 23:10:59,270 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cuda:0
+2025-12-05 23:10:59,270 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 23:11:03,256 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 23:11:03,836 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 23:11:03,999 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 23:11:04,008 - INFO - root - Qdrant client initialized.
+2025-12-05 23:11:04,008 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-05 23:11:04,017 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 23:11:04,019 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.2753)
+2025-12-05 23:11:04,019 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention re-ranking.
+2025-12-05 23:11:04,020 - INFO - QueryX-RAG - Using Ollama sqlcoder as primary SQL generator.
+2025-12-05 23:11:04,089 - INFO - root - Database engine initialized.
+2025-12-05 23:12:25,711 - INFO - QueryX-RAG - Start inference for question: give me the top 5 rows
+2025-12-05 23:12:25,712 - INFO - QueryX-RAG - Retrieving schema context for query: give me the top 5 rows
+2025-12-05 23:12:25,718 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cuda:0
+2025-12-05 23:12:25,718 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 23:12:29,751 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 23:12:30,323 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 23:12:30,476 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 23:12:30,487 - INFO - root - Qdrant client initialized.
+2025-12-05 23:12:30,487 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-05 23:12:30,500 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 23:12:30,501 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.2898)
+2025-12-05 23:12:30,501 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention re-ranking.
+2025-12-05 23:12:30,501 - INFO - QueryX-RAG - Using Ollama sqlcoder as primary SQL generator.
+2025-12-05 23:12:30,566 - INFO - root - Database engine initialized.
+2025-12-05 23:12:34,917 - INFO - QueryX-RAG - SQL executed successfully.
+2025-12-05 23:19:25,269 - INFO - QueryX-RAG - Start inference for question: give me the top 5 rows
+2025-12-05 23:19:25,270 - INFO - QueryX-RAG - Retrieving schema context for query: give me the top 5 rows
+2025-12-05 23:19:25,275 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cuda:0
+2025-12-05 23:19:25,275 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 23:19:29,038 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 23:19:29,631 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 23:19:29,830 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 23:19:29,838 - INFO - root - Qdrant client initialized.
+2025-12-05 23:19:29,838 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-05 23:19:29,855 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 23:19:29,857 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.2898)
+2025-12-05 23:19:29,857 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention re-ranking.
+2025-12-05 23:19:29,857 - INFO - QueryX-RAG - Using Ollama sqlcoder as primary SQL generator.
+2025-12-05 23:19:29,933 - INFO - root - Database engine initialized.
+2025-12-05 23:19:39,793 - ERROR - QueryX-RAG - Execution error: (psycopg2.errors.UndefinedColumn) column "age" does not exist
+LINE 1: SELECT * FROM mytable ORDER BY age DESC NULLS LAST LIMIT 5;
+                                       ^
+HINT:  Perhaps you meant to reference the column "mytable.Age".
+
+[SQL: SELECT * FROM mytable ORDER BY age DESC NULLS LAST LIMIT 5;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-12-05 23:19:39,794 - WARNING - QueryX-RAG - Execution failed (attempt 1): (psycopg2.errors.UndefinedColumn) column "age" does not exist
+LINE 1: SELECT * FROM mytable ORDER BY age DESC NULLS LAST LIMIT 5;
+                                       ^
+HINT:  Perhaps you meant to reference the column "mytable.Age".
+
+[SQL: SELECT * FROM mytable ORDER BY age DESC NULLS LAST LIMIT 5;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-12-05 23:19:39,794 - ERROR - QueryX-RAG - Execution error: (psycopg2.errors.UndefinedColumn) column "age" does not exist
+LINE 1: SELECT * FROM mytable ORDER BY age DESC NULLS LAST LIMIT 5;
+                                       ^
+HINT:  Perhaps you meant to reference the column "mytable.Age".
+
+[SQL: SELECT * FROM mytable ORDER BY age DESC NULLS LAST LIMIT 5;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-12-05 23:21:34,965 - INFO - QueryX-RAG - Start inference for question: give me the starting 5 rows
+2025-12-05 23:21:34,965 - INFO - QueryX-RAG - Retrieving schema context for query: give me the starting 5 rows
+2025-12-05 23:21:34,970 - INFO - sentence_transformers.SentenceTransformer - Use pytorch device_name: cuda:0
+2025-12-05 23:21:34,970 - INFO - sentence_transformers.SentenceTransformer - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2025-12-05 23:21:38,594 - INFO - root - Embedding model 'sentence-transformers/all-MiniLM-L6-v2' loaded.
+2025-12-05 23:21:39,209 - INFO - QueryX-RAG - Query embedding generated (dim=384).
+2025-12-05 23:21:39,382 - INFO - httpx - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-12-05 23:21:39,391 - INFO - root - Qdrant client initialized.
+2025-12-05 23:21:39,391 - INFO - QueryX-RAG - Using Qdrant.query_points for schema retrieval (top_k=6).
+2025-12-05 23:21:39,422 - INFO - httpx - HTTP Request: POST http://localhost:6333/collections/schema_descriptions/points/query "HTTP/1.1 200 OK"
+2025-12-05 23:21:39,423 - INFO - QueryX-RAG - Retrieved 1 schema entries. Top table: mytable (score=0.2354)
+2025-12-05 23:21:39,423 - WARNING - QueryX-RAG - Schema attention weights not found at models/schema_attention.pt; skipping attention re-ranking.
+2025-12-05 23:21:39,423 - INFO - QueryX-RAG - Using Ollama sqlcoder as primary SQL generator.
+2025-12-05 23:21:39,485 - INFO - root - Database engine initialized.
+2025-12-05 23:21:43,725 - INFO - QueryX-RAG - SQL executed successfully.

@@ -49,8 +49,16 @@ WITH_PREFIX   = "WITH "
 
 # --- Helpers -----------------------------------------------------------------
 def _looks_like_sql(s: str) -> bool:
-    s0 = (s or "").lstrip().upper()
-    return s0.startswith("SELECT") or s0.startswith("WITH")
+    """Check if string looks like SQL - more flexible for sqlcoder output."""
+    if not s:
+        return False
+    s0 = s.strip().upper()
+    # Accept if starts with SELECT/WITH OR contains FROM + LIMIT/ORDER BY
+    has_select = s0.startswith("SELECT") or s0.startswith("WITH")
+    has_from = "FROM" in s0
+    has_sql_keywords = any(kw in s0 for kw in ["LIMIT", "ORDER BY", "WHERE", "GROUP BY"])
+    return has_select or (has_from and has_sql_keywords)
+
 
 def _strip_code_fences(s: str) -> str:
     if not s:
@@ -218,6 +226,43 @@ def build_schema_string_from_db(schema_contexts: List[Dict]) -> str:
             logger.error("Failed to introspect table %s: %s", t, e)
     return " ".join(parts)
 
+def build_schema_ddl_from_db(schema_contexts: List[Dict]) -> str:
+    """
+    Build a DDL-like schema string suitable for sqlcoder prompts, e.g.:
+
+    CREATE TABLE mytable (
+        col1 TYPE,
+        col2 TYPE,
+        ...
+    );
+    """
+    engine = get_db_engine()
+    inspector = inspect(engine)
+
+    tables_seen = []
+    for c in schema_contexts:
+        t = c.get("table")
+        if t and t not in tables_seen:
+            tables_seen.append(t)
+
+    ddl_parts = []
+    for t in tables_seen:
+        try:
+            cols = inspector.get_columns(t)
+            col_lines = []
+            for col in cols:
+                name = col["name"]
+                # crude type mapping just for prompt readability
+                coltype = str(col.get("type") or "TEXT")
+                col_lines.append(f"    {name} {coltype}")
+            ddl = "CREATE TABLE " + t + " (\n" + ",\n".join(col_lines) + "\n);"
+            ddl_parts.append(ddl)
+        except Exception as e:
+            logger.error("Failed to introspect table %s for DDL: %s", t, e)
+
+    return "\n\n".join(ddl_parts)
+
+
 def build_prompt_for_t5(question: str, schema_contexts: List[Dict], examples: Optional[List[Dict]] = None) -> str:
     """
     EXACT training format:
@@ -291,6 +336,37 @@ def call_ollama(prompt: str, timeout: int = 120) -> str:
     except Exception as e:
         logger.error("Ollama request failed: %s", e)
         return ""
+    
+def generate_sql_with_ollama(question: str, schema_contexts: List[Dict]) -> str:
+    """Use Ollama sqlcoder - final cleanup."""
+    schema_ddl = build_schema_ddl_from_db(schema_contexts)
+    
+    prompt = f"""### PostgreSQL Database Schema:
+{schema_ddl}
+
+### Question:
+{question}
+
+### Generate a single valid PostgreSQL query:"""
+    
+    raw = call_ollama(prompt)
+    
+    # Strip Ollama tokens like <s>, </s>
+    sql = raw.replace("<s>", "").replace("</s>", "").strip()
+    
+    # Line-by-line extraction
+    lines = sql.split('\n')
+    for line in lines:
+        line = line.strip()
+        if _looks_like_sql(line):
+            return line.strip()
+    
+    # Fallback
+    return _strip_code_fences(sql).strip()
+
+
+
+
 
 # --- Validation & Execution ---------------------------------------------------
 def ensure_limit_clause(sql: str, max_rows: int = EXECUTE_MAX_ROWS) -> str:
@@ -310,28 +386,26 @@ def execute_sql_return(sql: str):
 
 # --- Self-Correction ----------------------------------------------------------
 def self_correct_sql(original_sql: str, error_msg: str, question: str, schema_contexts: List[Dict]) -> str:
-    prompt = (
-        "A previously generated SQL query failed with the following database error:\n\n"
-        f"{error_msg}\n\n"
-        "Original SQL:\n"
-        f"{original_sql}\n\n"
-        "Given the schema below, correct the SQL so it runs without error. "
-        "The corrected query must be a single read-only PostgreSQL SELECT/CTE query. "
-        "Return only the corrected SQL.\n\n"
-    )
-    for c in schema_contexts:
-        t = c.get("table") or "unknown_table"
-        d = c.get("description", "")
-        prompt += f"Table: {t}\n{d}\n\n"
-    prompt += f"Question: {question}\n"
+    schema_ddl = build_schema_ddl_from_db(schema_contexts)
+    prompt = f"""### Fix this PostgreSQL query:
 
-    tokenizer, model = load_t5_model()
-    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, padding="longest", max_length=512).to(_device)
-    with torch.no_grad():
-        outputs = model.generate(**inputs, max_length=256, num_beams=4, early_stopping=True)
-    corrected = _strip_code_fences(tokenizer.decode(outputs[0], skip_special_tokens=True).strip())
-    logger.info("Self-correction attempt produced SQL: %s", corrected)
-    return corrected
+Original SQL:
+{original_sql}
+
+Database Error:
+{error_msg}
+
+Database Schema:
+{schema_ddl}
+
+Question: {question}
+
+Return ONLY the corrected SQL query:"""
+    
+    corrected = call_ollama(prompt)
+    corrected = corrected.replace("<s>", "").replace("</s>", "").strip()
+    return _strip_code_fences(corrected)
+
 
 # --- Optional Re-ranking ------------------------------------------------------
 def _rerank_schema_with_attention(question: str, schema_contexts: List[Dict], top_k: int) -> List[Dict]:
@@ -365,66 +439,41 @@ def infer_and_execute(
     coarse_k = max(top_k * 2, top_k)
     schema_contexts = retrieve_schema(question, top_k=coarse_k)
     if not schema_contexts:
-        logger.warning("No schema context returned from Qdrant. Make sure build_schema.py has been executed.")
-        return {"error": "No schema context found. Please rebuild schema index."}
+        logger.warning("No schema context returned from Qdrant.")
+        return {"error": "No schema context found."}
 
-    # 2) (optional) attention re-ranking
+    # 2) attention re-ranking (optional)
     schema_contexts = _rerank_schema_with_attention(question, schema_contexts, top_k=top_k)
 
-    # 3) Generate SQL (local T5)
+    # 3) Generate SQL - PURE OLLAMA sqlcoder (NO T5)
     sql = ""
-    try:
-        sql = generate_sql_with_t5(question, schema_contexts, debug=debug)
-    except Exception as e:
-        logger.error("T5 generation failed: %s", e)
-        sql = ""
+    use_ollama_primary = (use_ollama_fallback or USE_OLLAMA_FALLBACK)
+    
+    if use_ollama_primary:
+        logger.info("Using Ollama sqlcoder as primary SQL generator.")
+        sql = generate_sql_with_ollama(question, schema_contexts)
+        sql = _strip_code_fences((sql or "").strip())
+        if debug:
+            print(">>> OLLAMA PRIMARY RAW:", sql)
+    else:
+        # Rule-based only (no T5)
+        logger.warning("T5 disabled - using rule-based SQL.")
+        sql = _rule_based_sql(question, schema_contexts, EXECUTE_MAX_ROWS)
 
-    sql = _strip_code_fences((sql or "").strip())
-
-    # 3.a) If still not SQL, try an instruction-hardened prompt
+    # 3.c) Rule-based last resort if Ollama fails
     if not _looks_like_sql(sql):
-        logger.warning("Model output not SQL; trying instruction-hardened prompt.")
-        tokenizer, model = load_t5_model()
-        prompt2 = _instruction_hardened_prompt(question, schema_contexts)
-        if debug:
-            print("\n==== INSTR PROMPT BEGIN ====\n", prompt2, "\n==== INSTR PROMPT END ====\n")
-        inputs2 = tokenizer(prompt2, return_tensors="pt", truncation=True, padding="longest", max_length=512).to(_device)
-        with torch.no_grad():
-            out2 = model.generate(**inputs2, max_length=256, num_beams=4, early_stopping=True, no_repeat_ngram_size=3)
-        sql2 = _strip_code_fences(tokenizer.decode(out2[0], skip_special_tokens=True).strip())
-        if debug:
-            print(">>> INSTR RAW SQL:", sql2)
-        if _looks_like_sql(sql2):
-            sql = sql2
-
-    # 3.b) If still not SQL, Ollama fallback (if enabled)
-    if not _looks_like_sql(sql) and (use_ollama_fallback or USE_OLLAMA_FALLBACK):
-        logger.warning("Falling back to Ollama...")
-        ollama_prompt = (
-            "Translate the question to a single valid PostgreSQL SELECT (or WITH/CTE) query.\n"
-            "Return ONLY the SQL (no explanation, no formatting).\n\n"
-            f"{build_prompt_for_t5(question, schema_contexts)}"
-        )
-        sql_ol = _strip_code_fences(call_ollama(ollama_prompt))
-        if debug:
-            print(">>> OLLAMA RAW:", sql_ol)
-        if _looks_like_sql(sql_ol):
-            sql = sql_ol
-
-    # 3.c) Rule-based last resort
-    if not _looks_like_sql(sql):
-        logger.warning("Non-SQL output after all attempts. Applying rule-based fallback.")
+        logger.warning("Ollama failed. Using rule-based fallback.")
         sql = _rule_based_sql(question, schema_contexts, EXECUTE_MAX_ROWS)
         if debug:
             print(">>> RULE-BASED SQL:", sql)
 
     if not sql:
-        return {"error": "Model returned empty SQL."}
+        return {"error": "No SQL generated."}
 
     # 4) Validate
     if not validate_sql(sql):
-        logger.error("SQL validation failed for: %s", sql)
-        return {"sql": sql, "valid": False, "executed": False, "error": "Validation failed."}
+        logger.error("SQL validation failed: %s", sql)
+        return {"sql": sql, "valid": False, "error": "Validation failed."}
 
     # 5) Enforce LIMIT
     sql_to_run = ensure_limit_clause(sql, EXECUTE_MAX_ROWS)
@@ -434,10 +483,9 @@ def infer_and_execute(
     result = {"sql": sql_to_run, "valid": True, "executed": False, "result": None}
 
     if not execute:
-        logger.info("Execution disabled, returning SQL only.")
         return result
 
-    # 6) Execute + self-correct
+    # 6) Execute
     attempts = 0
     while attempts <= max_correction_attempts:
         try:
@@ -448,26 +496,13 @@ def infer_and_execute(
             return result
         except Exception as e:
             attempts += 1
-            err_msg = str(e)
-            logger.error("Execution failed (attempt %d / %d): %s", attempts, max_correction_attempts, err_msg)
             if attempts > max_correction_attempts:
-                result["error"] = err_msg
+                result["error"] = str(e)
                 return result
-
-            try:
-                corrected_sql = self_correct_sql(sql_to_run, err_msg, question, schema_contexts)
-                if not corrected_sql or not validate_sql(corrected_sql):
-                    result["error"] = "Corrected SQL invalid."
-                    return result
-                sql_to_run = ensure_limit_clause(corrected_sql, EXECUTE_MAX_ROWS)
-                if debug:
-                    print(">>> RETRY with corrected SQL:", sql_to_run)
-            except Exception as inner:
-                logger.error("Self-correction process failed: %s", inner)
-                result["error"] = str(inner)
-                return result
+            logger.warning("Execution failed (attempt %d): %s", attempts, e)
 
     return result
+
 
 # --- CLI ----------------------------------------------------------------------
 if __name__ == "__main__":

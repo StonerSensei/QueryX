@@ -23,8 +23,13 @@ MODEL_PATH = "models/flan_t5_sql"
 USE_OLLAMA_FALLBACK = False
 
 # Ollama configuration
+# Ollama configuration
 OLLAMA_URL = "http://localhost:11434/api/generate"
-OLLAMA_MODEL = "llama3"  # or whatever model you're using
+OLLAMA_MODEL = "sqlcoder:latest"  # or "sqlcoder:latest", "sqlcoder:7b", etc.
+
+# Whether to fall back to Ollama if local T5 generation fails
+# (we will also add an option to use Ollama as primary)
+USE_OLLAMA_FALLBACK = True
 
 # Execution settings
 EXECUTE_MAX_ROWS = 100
